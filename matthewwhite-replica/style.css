@@ -1,0 +1,146 @@
+body {
+    margin: 0;
+    font-family: 'Roboto Mono', monospace; /* A monospace font similar to the screenshot */
+    background-color: #1a1a1a; /* Dark background */
+    color: #e0e0e0; /* Light text color */
+    line-height: 1.6;
+}
+
+header {
+    background-color: #1a1a1a;
+    padding: 1rem 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #e0e0e0;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 2rem;
+}
+
+nav ul li a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #007bff; /* A subtle hover effect */
+}
+
+section {
+    padding: 100px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding-top: 60px; /* To account for fixed header */
+}
+
+#hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    color: #e0e0e0;
+}
+
+#hero p {
+    font-size: 1.5rem;
+    color: #b0b0b0;
+}
+
+#about {
+    background-color: #222222; /* Slightly lighter dark background for contrast */
+    padding-top: 60px;
+}
+
+#about h2 {
+    font-size: 2.5rem;
+    color: #e0e0e0;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+#about h2::after {
+    content: '';
+    width: 60px;
+    height: 4px;
+    background-color: #007bff;
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+}
+
+.about-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.about-content p {
+    flex: 1;
+    min-width: 300px;
+    font-size: 1.1rem;
+    color: #b0b0b0;
+}
+
+.skills {
+    flex: 1;
+    min-width: 300px;
+}
+
+.skills h3 {
+    font-size: 1.8rem;
+    color: #e0e0e0;
+    margin-bottom: 1.5rem;
+}
+
+.skill-category {
+    margin-bottom: 1.5rem;
+}
+
+.skill-category h4 {
+    font-size: 1.2rem;
+    color: #007bff;
+    margin-bottom: 0.8rem;
+}
+
+.skill-category ul {
+    list-style: none;
+    padding: 0;
+}
+
+.skill-category ul li {
+    margin-bottom: 0.5rem;
+    color: #b0b0b0;
+}
