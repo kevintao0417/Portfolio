@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://kevintao0417.github.io/sitemap.xml
+Sitemap: https://kevintao0417.github.io/Portfolio/sitemap.xml
