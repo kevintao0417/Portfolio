@@ -1,14 +1,8 @@
 github_users:
-  - torvalds
-  - alshedivat
+  - kevintao0417
 
 repo_description_lines_max: 2
 
 github_repos:
-  - alshedivat/al-folio
-  - jekyll/jekyll
-  - twbs/bootstrap
-  - jquery/jquery
-  - FortAwesome/Font-Awesome
-  - mathjax/MathJax
-  - jpswalsh/academicons
+  - Gimmick12-DYY/Duke-Datafest2025
+  - kevintao0417/instagram-follower-scraper
