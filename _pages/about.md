@@ -42,9 +42,11 @@ As a **Business Compliance Consultant Intern** at **Ernst & Young** (May-August 
 ## Projects
 
 ### ASA DataFest 2025: Office Expansion Analysis
+
 My team won the **Best Visualization Award** out of 58 teams at ASA DataFest 2025 (Duke University). We analyzed U.S. commercial real estate transactions to identify high-growth regions for office expansion in various sectors. I developed treemaps and stacked bar charts using Python (matplotlib, plotly) and engineered a Random Forest classifier that achieved 92.5% prediction accuracy for optimal office locations.
 
 ### Marketing Campaign Optimization
+
 I developed a machine learning model to predict customer responsiveness to marketing campaigns for iFood, using customer demographics and platform usage data. Through feature engineering and exploratory data analysis, I implemented Decision Tree models achieving 88% accuracy while ensuring compliance with Brazil's LGPD data regulations.
 
 ## Technical Skills

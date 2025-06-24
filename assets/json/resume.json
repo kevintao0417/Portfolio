@@ -85,61 +85,31 @@
       "name": "Programming Languages",
       "level": "Advanced",
       "icon": "fa-solid fa-code",
-      "keywords": [
-        "Python (pandas, numpy, matplotlib, plotly, scipy, Selenium, PyTorch, )",
-        "SQL",
-        "R",
-        "Java",
-        "C++"
-      ]
+      "keywords": ["Python (pandas, numpy, matplotlib, plotly, scipy, Selenium, PyTorch, )", "SQL", "R", "Java", "C++"]
     },
     {
       "name": "Tools & Software",
       "level": "Advanced",
       "icon": "fa-solid fa-toolbox",
-      "keywords": [
-        "Tableau",
-        "Power BI",
-        "LaTeX",
-        "Microsoft Power Automate",
-        "Excel",
-        "GoogleADK",
-        "AI Agents"
-      ]
+      "keywords": ["Tableau", "Power BI", "LaTeX", "Microsoft Power Automate", "Excel", "GoogleADK", "AI Agents"]
     },
     {
       "name": "Data Science",
       "level": "Advanced",
       "icon": "fa-solid fa-chart-line",
-      "keywords": [
-        "A/B testing",
-        "Predictive modeling",
-        "Causal inference",
-        "Regression analysis",
-        "Random forests"
-      ]
+      "keywords": ["A/B testing", "Predictive modeling", "Causal inference", "Regression analysis", "Random forests"]
     },
     {
       "name": "Workflow & Collaboration",
       "level": "Advanced",
       "icon": "fa-solid fa-users-gear",
-      "keywords": [
-        "Git",
-        "Jupyter",
-        "VSCode",
-        "Agile development"
-      ]
+      "keywords": ["Git", "Jupyter", "VSCode", "Agile development"]
     },
     {
       "name": "Optimization & Measurement",
       "level": "Advanced",
       "icon": "fa-solid fa-magnifying-glass-chart",
-      "keywords": [
-        "Experiment design",
-        "Statistical analysis",
-        "Performance evaluation",
-        "Modeling"
-      ]
+      "keywords": ["Experiment design", "Statistical analysis", "Performance evaluation", "Modeling"]
     }
   ],
   "languages": [
@@ -158,12 +128,7 @@
     {
       "name": "Data Science",
       "icon": "fa-solid fa-database",
-      "keywords": [
-        "Machine Learning",
-        "Data Visualization",
-        "Statistical Analysis",
-        "Predictive Modeling"
-      ]
+      "keywords": ["Machine Learning", "Data Visualization", "Statistical Analysis", "Predictive Modeling"]
     }
   ],
   "references": [],
