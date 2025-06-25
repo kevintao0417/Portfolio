@@ -30,7 +30,7 @@ The project is structured as follows, focusing on the main components that you w
 |   └── 📄 404.md: 404 page (page not found)
 ├── 📂 _posts/: contains the blog posts
 ├── 📂 _projects/: contains the projects
-└── 📂 _sass/: contains the SASS files that define the style of the website
+└── 📂 _sass/: contains tMarkdown EditorMarkdown Editorhe SASS files that define the style of the website
     ├── 📄 _base.scss: base style of the website
     ├── 📄 _cv.scss: style of the CV page
     ├── 📄 _distill.scss: style of the Distill articles

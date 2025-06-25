@@ -39,6 +39,7 @@ I'm currently studying at **UNC Chapel Hill** (since August 2023), where my cour
 
 As a **Business Compliance Consultant Intern** at **Ernst & Young** (May-August 2024), I contributed to risk consulting engagements for financial institutions, focusing on regulatory compliance and internal controls. I conducted assessments across multiple departments, identifying key risk points and operational inefficiencies. Using Python and Excel, I evaluated control effectiveness and developed actionable recommendations to improve enterprise risk frameworks.
 
+
 ## Projects
 
 ### ASA DataFest 2025: Office Expansion Analysis
