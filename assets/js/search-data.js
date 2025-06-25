@@ -9,26 +9,19 @@ ninja.data = [{
     handler: () => {
       window.location.href = "/Portfolio/";
     },
-  },{id: "nav-blog",
-          title: "Blog",
-          description: "",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/Portfolio/blog/";
-          },
-        },{id: "nav-projects",
+  },{id: "nav-projects",
           title: "Projects",
           description: "A growing collection of your cool projects.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/Portfolio/projects/";
           },
-        },{id: "nav-repositories",
-          title: "Repositories",
-          description: "Personal repositories.",
+        },{id: "nav-experience",
+          title: "Experience",
+          description: "Past working experience.",
           section: "Navigation",
           handler: () => {
-            window.location.href = "/Portfolio/repositories/";
+            window.location.href = "/Portfolio/Experience/";
           },
         },{id: "nav-cv",
           title: "CV",
@@ -36,6 +29,13 @@ ninja.data = [{
           section: "Navigation",
           handler: () => {
             window.location.href = "/Portfolio/cv/";
+          },
+        },{id: "nav-repositories",
+          title: "Repositories",
+          description: "Personal repositories.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/Portfolio/repositories/";
           },
         },{id: "dropdown-bookshelf",
               title: "bookshelf",
@@ -412,14 +412,14 @@ ninja.data = [{
           description: "",
           section: "Books",handler: () => {
               window.location.href = "/Portfolio/books/the_godfather/";
-            },},{id: "projects-project-1",
-          title: 'project 1',
-          description: "with background image",
+            },},{id: "projects-asa-datafest-2025",
+          title: 'ASA DataFest 2025',
+          description: "Best Visualization Award - Office Expansion Analysis",
           section: "Projects",handler: () => {
               window.location.href = "/Portfolio/projects/1_project/";
-            },},{id: "projects-project-2",
-          title: 'project 2',
-          description: "a project with a background image and giscus comments",
+            },},{id: "projects-marketing-campaign-optimization",
+          title: 'Marketing Campaign Optimization',
+          description: "Decision Tree Model for Customer Targeting",
           section: "Projects",handler: () => {
               window.location.href = "/Portfolio/projects/2_project/";
             },},{id: "projects-project-3-with-very-long-name",
@@ -427,70 +427,26 @@ ninja.data = [{
           description: "a project that redirects to another website",
           section: "Projects",handler: () => {
               window.location.href = "/Portfolio/projects/3_project/";
-            },},{id: "projects-project-4",
-          title: 'project 4',
-          description: "another without an image",
-          section: "Projects",handler: () => {
-              window.location.href = "/Portfolio/projects/4_project/";
-            },},{id: "projects-project-5",
-          title: 'project 5',
-          description: "a project with a background image",
-          section: "Projects",handler: () => {
-              window.location.href = "/Portfolio/projects/5_project/";
-            },},{id: "projects-project-6",
-          title: 'project 6',
-          description: "a project with no image",
-          section: "Projects",handler: () => {
-              window.location.href = "/Portfolio/projects/6_project/";
-            },},{id: "projects-project-7",
-          title: 'project 7',
-          description: "with background image",
-          section: "Projects",handler: () => {
-              window.location.href = "/Portfolio/projects/7_project/";
-            },},{id: "projects-project-8",
-          title: 'project 8',
-          description: "an other project with a background image and giscus comments",
-          section: "Projects",handler: () => {
-              window.location.href = "/Portfolio/projects/8_project/";
-            },},{id: "projects-project-9",
-          title: 'project 9',
-          description: "another project with an image 🎉",
-          section: "Projects",handler: () => {
-              window.location.href = "/Portfolio/projects/9_project/";
             },},{
         id: 'social-email',
         title: 'email',
         section: 'Socials',
         handler: () => {
-          window.open("mailto:%79%6F%75@%65%78%61%6D%70%6C%65.%63%6F%6D", "_blank");
+          window.open("mailto:%6B%65%76%69%6E%74%61%6F%30%34%31%37@%6F%75%74%6C%6F%6F%6B.%63%6F%6D", "_blank");
         },
       },{
-        id: 'social-inspire',
-        title: 'Inspire HEP',
+        id: 'social-github',
+        title: 'GitHub',
         section: 'Socials',
         handler: () => {
-          window.open("https://inspirehep.net/authors/1010907", "_blank");
+          window.open("https://github.com/kevintao0417# your GitHub user name", "_blank");
         },
       },{
-        id: 'social-rss',
-        title: 'RSS Feed',
+        id: 'social-linkedin',
+        title: 'LinkedIn',
         section: 'Socials',
         handler: () => {
-          window.open("/Portfolio/feed.xml", "_blank");
-        },
-      },{
-        id: 'social-scholar',
-        title: 'Google Scholar',
-        section: 'Socials',
-        handler: () => {
-          window.open("https://scholar.google.com/citations?user=qc6CJjYAAAAJ", "_blank");
-        },
-      },{
-        id: 'social-custom_social',
-        title: 'Custom_social',
-        section: 'Socials',
-        handler: () => {
-          window.open("https://www.alberteinstein.com/", "_blank");
+          window.open("https://www.linkedin.com/in/shengkai-tao-09ba831b1# your LinkedIn user name", "_blank");
         },
       },{
       id: 'light-theme',
