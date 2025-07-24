@@ -45,6 +45,7 @@ One of our key contributions was developing sophisticated visualizations that ma
 We built a series of interactive visualizations, including a Miami-region treemap and a stacked bar chart of industry trends, that revealed how law and financial sectors are driving growth in Miami-Dade County. These visuals played a key role in communicating our insight that Miami represents a uniquely robust and expanding market, contrary to national relocation trends.
 
 Using Python with matplotlib and plotly, we created:
+
 - **Treemaps** to visualize market share and property distribution
 - **Stacked bar charts** to show year-over-year growth by region and sector
 - **Interactive dashboards** allowing stakeholders to explore different market scenarios
@@ -74,9 +75,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 # Feature engineering
-features = ['rent_per_sqft', 'vacancy_rate', 'yoy_growth', 
+features = ['rent_per_sqft', 'vacancy_rate', 'yoy_growth',
            'transaction_volume', 'avg_lease_term', 'tech_presence']
-           
+
 X = real_estate_df[features]
 y = real_estate_df['high_growth_market']
 
@@ -111,7 +112,6 @@ Our storytelling, powered by data and visual clarity, helped us stand out in a r
 2. Contrasted this with Miami-Dade County's unique growth pattern
 3. Highlighted the driving forces behind Miami's expansion (legal and financial sectors)
 4. Provided actionable recommendations backed by our predictive model
-
 
 ### Results and Impact
 

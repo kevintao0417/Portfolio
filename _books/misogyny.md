@@ -5,7 +5,6 @@ author: Chizuko Ueno
 isbn: 9787542645715
 cover: /assets/img/book_covers/厌女_日本的女性嫌恶.jpeg
 status: Finished
-
 ---
 
 These are my notes and clippings from the book.
@@ -88,7 +87,7 @@ Highlight (yellow) - Location 469
 
 Highlight (yellow) - Location 546
 
- 依据大塚英志《少女民俗学》〔1989，1997〕一书，我把“少女”定义为，“其身体虽已到达性成熟年龄但却被禁止用于性目的，这种身体的所有者即为少女。”
+依据大塚英志《少女民俗学》〔1989，1997〕一书，我把“少女”定义为，“其身体虽已到达性成熟年龄但却被禁止用于性目的，这种身体的所有者即为少女。”
 
 第四章 “无人气男”的厌女症
 

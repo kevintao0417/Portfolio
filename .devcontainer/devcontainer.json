@@ -13,16 +13,17 @@
   },
 
   // Optionally: run jekyll serve automatically on container entering using the Docker entrypoint
+  "postCreateCommand": "npm install",
   "postAttachCommand": "./bin/entry_point.sh",
 
   "customizations": {
     "vscode": {
       "extensions": [
-        "esbenp.prettier-vscode", 
-        "sissel.shopify-liquid", 
+        "esbenp.prettier-vscode",
+        "sissel.shopify-liquid",
         "yzhang.markdown-all-in-one",
         "saoudrizwan.claude-dev",
-        "ms-azuretools.vscode-containers",
+        "ms-azuretools.vscode-containers"
       ],
       "settings": {
         // use prettier code formatter as default formatter
