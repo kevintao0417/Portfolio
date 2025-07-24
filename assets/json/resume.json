@@ -1,11 +1,11 @@
 {
   "basics": {
     "name": "Shengkai Tao",
-    "label": "Statistics and Data Science Student",
+    "major": "Statistics and Data Science",
     "image": "",
     "email": "kevintao0417@outlook.com",
     "phone": "(919) 260-0630",
-    "url": "https://linkedin.com/in/shengkai-tao-09ba831b1",
+    "Linkedin": "https://linkedin.com/in/shengkai-tao-09ba831b1",
     "summary": "Statistics and Data Science student at UNC Chapel Hill with experience in data analysis, machine learning, and business consulting.",
     "location": {
       "address": "",
@@ -28,6 +28,21 @@
     ]
   },
   "work": [
+    {
+      "name": "Rowdy Braude",
+      "position": "AI Agent Engineer Intern",
+      "url": "",
+      "startDate": "2025-05-01",
+      "endDate": "",
+      "summary": "Developed and deployed a multi-agent system using Python and Google’s Agent Development Kit (ADK) to conduct comprehensive strategic analysis of pharmaceutical brands. Aimed for replacing job now heavily relied on human.",
+      "location": "Remote, base Charlotte",
+      "highlights": [
+        "Engineered an AI-driven workflow to automate the generation of creative briefs and concepts, transforming complex clinical data into compelling, optimized promotional messages, including posters and images that can be used for advertsing immedietely.",
+        "Designed and implemented a modular architecture with specialized AI agents formarket positioning analysis, competitive landscape assessment, andtarget audience evaluation, incorporating behavioral science and cultural anthropology insights.",
+        "Utilized an AI critique loop to refine andoptimize marketing messagesagainst best practices, customer needs, and competitive differentiation, resulting in aportfolio of data-informed, rigorously critiqued creative concepts.",
+        "Integrated custom tools with agents for enhanced functionality, including web scraping, report generation and data formatting, and utilizedDockerfor containerization and deployment."
+      ]
+    },
     {
       "name": "Ernst & Young",
       "position": "Business Compliance Consultant Intern",

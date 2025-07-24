@@ -1,127 +1,74 @@
 ---
 layout: page
-title: Marketing Campaign Optimization
-description: Decision Tree Model for Customer Targeting
-img: assets/img/3.jpg
+title: Marketing Campaign Optimization for iFood
+description: A case study on using data-driven insights to optimize marketing campaigns.
+img: assets/img/projects/project2/project_poster.png
 importance: 2
-category: work
-giscus_comments: true
+category: Study
+giscus_comments: false
 ---
 
-## Marketing Campaign Optimization: Decision Tree Model for Customer Targeting
+## Marketing Campaign Optimization for iFood
 
-This project focused on developing a machine learning model to predict customer responsiveness to marketing campaigns for iFood, leveraging customer demographics, spending habits, and platform usage data.
+This project, developed by Yi Tan, Gordan Tao, Shengkai Tao, and Thomas You, aimed to enhance the effectiveness of iFood's marketing campaigns by predicting customer response. By leveraging data-driven insights, the team developed a model to identify customers most likely to engage with marketing initiatives, thereby optimizing resource allocation and maximizing revenue.
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="data exploration" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/3.jpg" title="feature importance" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="model comparison" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/projects/project2/project_poster.png" title="Project Poster" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Left: Exploratory data analysis of customer segments. Middle: Feature importance visualization showing key predictors. Right: Performance comparison between Small Tree and Large Tree models.
+    A high-level overview of the project, from data exploration to deployment.
 </div>
 
 ### Project Overview
 
-In this project, I worked with iFood, a leading food delivery platform in Brazil, to optimize their marketing campaign targeting. The goal was to develop a predictive model that could identify which customers would be most likely to respond positively to marketing campaigns, thereby increasing conversion rates and reducing marketing costs.
+The primary research question was to determine the extent to which spending habits, demographic features, and activity patterns influence a customer’s likelihood of responding to marketing campaigns. The goal was to build a predictive model to help iFood target customers more effectively, improving campaign ROI and customer engagement.
 
 ### Data Analysis and Feature Engineering
 
-The first phase involved extensive exploratory data analysis to understand the patterns in customer behavior and identify key predictors of campaign responsiveness.
+The project utilized a dataset from iFood's internal database, containing customer demographics, purchasing trends, and campaign reactions. The data preparation phase involved several key steps:
 
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="correlation matrix" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    Correlation matrix showing relationships between customer attributes and campaign response rates.
-</div>
+- **Dropping Redundant Features:** Features like `Z_CostContact` and `Z_Revenue` were removed as they had no predictive value.
+- **Consolidating Campaign Data:** Individual campaign acceptance features (`AcceptedCmp1`, `AcceptedCmp2`, etc.) were consolidated into a single `AcceptedCmpOverall` feature.
+- **Ordinal Encoding:** The five mutually exclusive education features were converted into a single ordinal variable, `education_level`.
+- **Handling Redundancy:** The `MntRegularProds` feature was dropped due to its perfect correlation with `MntTotal`.
 
-Using Python with pandas, numpy, and matplotlib, I conducted thorough data analysis that revealed several key insights:
+Correlation matrices and visualizations were used to identify the most promising features for the model.
 
-- Past campaign acceptance was the strongest predictor of future responsiveness
-- Customer tenure showed a non-linear relationship with campaign acceptance
-- Total spending had a positive correlation with response rates, but with diminishing returns
-- Certain demographic segments showed significantly higher response rates
+### Key Findings
+
+The exploratory data analysis revealed several important insights:
+
+- **`AcceptedCmpOverall`:** This feature had the highest correlation with the campaign response, indicating that past engagement is a strong predictor of future behavior.
+- **`Customer_Days`:** The number of days a customer has been on the platform showed a positive correlation with their likelihood to respond.
+- **`MntTotal` and `Income`:** Both total spending and income were identified as significant predictors of campaign response.
 
 ### Model Development and Evaluation
 
-I implemented and evaluated two Decision Tree models:
+The team developed two Decision Tree Classifier models:
+
+1.  **Small Tree Model:** Used a selected subset of the most predictive features (`AcceptedCmpOverall`, `Customer_Days`, `MntTotal`, `Income`).
+2.  **Large Tree Model:** Utilized all available features to serve as a baseline for comparison.
+
+Both models were optimized for tree depth to maximize performance while avoiding overfitting.
 
 ```python
-# Sample code from the model development phase
-import pandas as pd
-import numpy as np
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-
-# Feature selection for Small Tree Model
-small_features = ['past_accepted', 'tenure_months', 'total_spend', 'order_frequency']
-X_small = customer_df[small_features]
-y = customer_df['campaign_response']
-
-# Full feature set for Large Tree Model
-large_features = ['past_accepted', 'tenure_months', 'total_spend', 'order_frequency', 
-                 'avg_order_value', 'last_order_days', 'customer_segment', 
-                 'platform_visits', 'app_usage', 'web_usage']
-X_large = customer_df[large_features]
-
-# Train and evaluate both models
-X_small_train, X_small_test, y_train, y_test = train_test_split(X_small, y, test_size=0.25)
-X_large_train, X_large_test, _, _ = train_test_split(X_large, y, test_size=0.25)
-
-small_tree = DecisionTreeClassifier(max_depth=5)
-small_tree.fit(X_small_train, y_train)
-
-large_tree = DecisionTreeClassifier(max_depth=8)
-large_tree.fit(X_large_train, y_train)
-
-# Compare performance
-small_pred = small_tree.predict(X_small_test)
-large_pred = large_tree.predict(X_large_test)
-
-small_accuracy = accuracy_score(y_test, small_pred)
-large_accuracy = accuracy_score(y_test, large_pred)
-
-print(f"Small Tree Accuracy: {small_accuracy:.2%}")  # 88.2%
-print(f"Large Tree Accuracy: {large_accuracy:.2%}")  # 88.7%
+# Pseudocode for creating the ordinal education variable
+education_matrix = raw_data.filter(['education_Basic', 'education_2n_Cycle', 'education_Graduation', 'education_Master', 'education_PhD'])
+education_level = education_matrix.values @ np.array([1, 2, 3, 4, 5])
+raw_data['education_level'] = education_level
+raw_data.drop(columns=['education_Basic', 'education_2n_Cycle', 'education_Graduation', 'education_Master', 'education_PhD'])
 ```
 
-<div class="row justify-content-sm-center">
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/6.jpg" title="decision tree visualization" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/11.jpg" title="ROC curve" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    Left: Visualization of the optimized decision tree model. Right: ROC curve showing model performance across different thresholds.
-</div>
+### Results and Deployment
 
-### Ethical Considerations and Compliance
+Both the Small Tree and Large Tree models achieved a mean test accuracy of approximately **88%**. This demonstrated that careful feature selection could produce a model that was just as effective as one that used all features, but with greater interpretability and efficiency.
 
-A significant aspect of this project involved addressing potential biases in the model and ensuring compliance with Brazil's Lei Geral de Proteção de Dados (LGPD) regulations. I implemented several measures:
+The deployment vision for the model includes:
 
-- Conducted fairness audits across different demographic groups
-- Implemented differential privacy techniques to protect customer data
-- Created documentation for model transparency and explainability
-- Designed a data retention and processing policy compliant with LGPD requirements
+- **Customer Segmentation:** Identifying and targeting customers with a high probability of responding to campaigns.
+- **Resource Optimization:** Focusing marketing efforts on the most receptive audience to maximize ROI.
+- **Personalized Offers:** Enabling the creation of targeted advertisements and promotions.
 
-### Results and Business Impact
-
-The final model achieved **88% accuracy** in predicting customer campaign responsiveness. When deployed in a controlled A/B test:
-
-- 27% increase in campaign conversion rates
-- 32% reduction in marketing costs per acquisition
-- 18% improvement in overall campaign ROI
-
-The model was subsequently integrated into iFood's marketing automation platform, allowing for dynamic customer segmentation and personalized campaign targeting.
+The team also highlighted the importance of addressing challenges such as data privacy (in compliance with LGPD), model scalability, and the need for continuous monitoring and retraining to adapt to changing customer behaviors.

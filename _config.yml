@@ -150,6 +150,8 @@ collections:
     output: true
   projects:
     output: true
+  experience:
+    output: true
 
 # -----------------------------------------------------------------------------
 # Jekyll settings

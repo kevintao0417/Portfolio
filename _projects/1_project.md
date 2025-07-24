@@ -4,7 +4,7 @@ title: ASA DataFest 2025
 description: Best Visualization Award - Office Expansion Analysis
 img: assets/img/projects/project1/img2.jpg
 importance: 1
-category: work
+category: Study
 ---
 
 ## ASA DataFest 2025: Office Expansion Analysis
