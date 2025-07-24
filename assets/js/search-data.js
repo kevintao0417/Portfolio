@@ -9,7 +9,14 @@ ninja.data = [{
     handler: () => {
       window.location.href = "/Portfolio/";
     },
-  },{id: "nav-projects",
+  },{id: "nav-cv",
+          title: "CV",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/Portfolio/cv/";
+          },
+        },{id: "nav-projects",
           title: "Projects",
           description: "A growing collection of your cool projects.",
           section: "Navigation",
@@ -18,17 +25,10 @@ ninja.data = [{
           },
         },{id: "nav-experience",
           title: "Experience",
-          description: "Past working experience.",
+          description: "A summary of my professional experience.",
           section: "Navigation",
           handler: () => {
-            window.location.href = "/Portfolio/Experience/";
-          },
-        },{id: "nav-cv",
-          title: "CV",
-          description: "This is a description of the page. You can modify it in &#39;_pages/cv.md&#39;. You can also change or remove the top pdf download button.",
-          section: "Navigation",
-          handler: () => {
-            window.location.href = "/Portfolio/cv/";
+            window.location.href = "/Portfolio/experience/";
           },
         },{id: "nav-repositories",
           title: "Repositories",
@@ -37,14 +37,14 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/Portfolio/repositories/";
           },
-        },{id: "dropdown-bookshelf",
-              title: "bookshelf",
-              description: "",
-              section: "Dropdown",
-              handler: () => {
-                window.location.href = "/Portfolio/books/";
-              },
-            },{id: "post-a-post-with-plotly-js",
+        },{id: "nav-bookshelf",
+          title: "Bookshelf",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/Portfolio/books/";
+          },
+        },{id: "post-a-post-with-plotly-js",
         
           title: "a post with plotly.js",
         
@@ -407,26 +407,71 @@ ninja.data = [{
             window.location.href = "/Portfolio/blog/2015/formatting-and-links/";
           
         },
-      },{id: "books-the-godfather",
-          title: 'The Godfather',
+      },{id: "books-churchill-walking-with-destiny",
+          title: 'Churchill: Walking with Destiny',
           description: "",
           section: "Books",handler: () => {
-              window.location.href = "/Portfolio/books/the_godfather/";
+              window.location.href = "/Portfolio/books/churchill_walking_with_destiny/";
+            },},{id: "books-misogyny-the-hatred-of-women",
+          title: 'Misogyny: The Hatred of Women',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/Portfolio/books/misogyny/";
+            },},{id: "books-ninety-three",
+          title: 'Ninety-Three',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/Portfolio/books/ninety_three/";
+            },},{id: "books-the-legacy-of-the-roman-empire-a-history-of-europe-400-1000",
+          title: 'The Legacy of the Roman Empire: A History of Europe, 400-1000',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/Portfolio/books/the_legacy_of_the_roman_empire/";
+            },},{id: "books-the-plague",
+          title: 'The Plague',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/Portfolio/books/the_plague/";
+            },},{id: "books-the-prince",
+          title: 'The Prince',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/Portfolio/books/the_prince/";
+            },},{id: "books-the-protestant-ethic-and-the-spirit-of-capitalism",
+          title: 'The Protestant Ethic and the Spirit of Capitalism',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/Portfolio/books/the_protestant_ethic_and_the_spirit_of_capitalism/";
+            },},{id: "books-the-story-of-the-romans",
+          title: 'The Story of the Romans',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/Portfolio/books/the_story_of_the_romans/";
+            },},{id: "books-what-is-history",
+          title: 'What is History?',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/Portfolio/books/what_is_history/";
+            },},{id: "experience-compliance-consultant-intern",
+          title: 'Compliance Consultant Intern',
+          description: "Ernst&amp;Young (Shanghai, China) | May 2024 – Aug 2024",
+          section: "Experience",handler: () => {
+              window.location.href = "/Portfolio/experience/2_ey/";
+            },},{id: "experience-ai-agent-engineer-intern",
+          title: 'AI Agent Engineer Intern',
+          description: "Rowdy Braude (Remote, base in Charlotte, NC) | May 2025 – Now",
+          section: "Experience",handler: () => {
+              window.location.href = "/Portfolio/experience/1_rowdy_braude/";
             },},{id: "projects-asa-datafest-2025",
           title: 'ASA DataFest 2025',
           description: "Best Visualization Award - Office Expansion Analysis",
           section: "Projects",handler: () => {
               window.location.href = "/Portfolio/projects/1_project/";
-            },},{id: "projects-marketing-campaign-optimization",
-          title: 'Marketing Campaign Optimization',
-          description: "Decision Tree Model for Customer Targeting",
+            },},{id: "projects-marketing-campaign-optimization-for-ifood",
+          title: 'Marketing Campaign Optimization for iFood',
+          description: "A case study on using data-driven insights to optimize marketing campaigns.",
           section: "Projects",handler: () => {
               window.location.href = "/Portfolio/projects/2_project/";
-            },},{id: "projects-project-3-with-very-long-name",
-          title: 'project 3 with very long name',
-          description: "a project that redirects to another website",
-          section: "Projects",handler: () => {
-              window.location.href = "/Portfolio/projects/3_project/";
             },},{
         id: 'social-email',
         title: 'email',
