@@ -472,6 +472,16 @@ ninja.data = [{
           description: "A case study on using data-driven insights to optimize marketing campaigns.",
           section: "Projects",handler: () => {
               window.location.href = "/Portfolio/projects/2_project/";
+            },},{id: "projects-evaluating-fire-response-strategies-in-chapel-hill",
+          title: 'Evaluating Fire Response Strategies in Chapel Hill',
+          description: "A spatial analysis and optimization project balancing emergency response efficiency with community noise reduction.",
+          section: "Projects",handler: () => {
+              window.location.href = "/Portfolio/projects/3_project/";
+            },},{id: "projects-personal-resource-management",
+          title: 'Personal Resource Management',
+          description: "A physical data analysis exploring the digital consumption, sleep architecture, and hydration.",
+          section: "Projects",handler: () => {
+              window.location.href = "/Portfolio/projects/4_project/";
             },},{
         id: 'social-email',
         title: 'email',
