@@ -54,7 +54,6 @@ The team developed two Decision Tree Classifier models:
 Both models were optimized for tree depth to maximize performance while avoiding overfitting.
 
 ```python
-# Pseudocode for creating the ordinal education variable
 education_matrix = raw_data.filter(['education_Basic', 'education_2n_Cycle', 'education_Graduation', 'education_Master', 'education_PhD'])
 education_level = education_matrix.values @ np.array([1, 2, 3, 4, 5])
 raw_data['education_level'] = education_level
