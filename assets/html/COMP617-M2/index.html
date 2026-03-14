@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The $100,000 Question — H-1B Visa Data Story</title>
+
+<!-- D3 v7 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<!-- TopoJSON for the map -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<!-- NYT-style fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Helvetica:wght@300;400;500;700&family=Cheltenham:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Imperial:wght@400;700&family=Karnak+Condensed:wght@400;700&display=swap" rel="stylesheet" />
+
+<style>
+/* ─── NYT Design tokens ──────────────────────────────── */
+:root {
+  --nyt-black:       #000;
+  --nyt-white:       #fff;
+  --nyt-gray-light:  #f7f7f7;
+  --nyt-gray:        #333;
+  --nyt-gray-med:    #666;
+  --nyt-gray-border: #e2e2e2;
+  --nyt-blue:        #326891;
+  --nyt-red:         #d0021b;
+  --nyt-yellow:      #ffd700;
+  --col:             900px;
+  --col-wide:        1050px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--nyt-white);
+  color: var(--nyt-black);
+  font-family: 'nyt-cheltenham', 'Noto Serif', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.625;
+  font-weight: 400;
+}
+
+/* ─── NYT Masthead ───────────────────────────────────── */
+.masthead {
+  background: var(--nyt-black);
+  color: var(--nyt-white);
+  text-align: center;
+  padding: 8px 20px;
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--nyt-gray-border);
+}
+
+/* ─── NYT Hero section ───────────────────────────────── */
+.hero {
+  max-width: var(--col);
+  margin: 0 auto;
+  padding: 40px 20px;
+  border-bottom: 1px solid var(--nyt-gray-border);
+}
+.kicker {
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--nyt-blue);
+  margin-bottom: 12px;
+}
+h1 {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: clamp(28px, 4.5vw, 42px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  color: var(--nyt-black);
+}
+h1 em { 
+  font-style: italic; 
+  color: var(--nyt-black);
+  font-weight: 400;
+}
+.hero-sub {
+  font-size: 20px;
+  color: var(--nyt-gray);
+  max-width: 540px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  font-family: 'Noto Serif', Georgia, serif;
+  font-weight: 400;
+}
+.byline {
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 12px;
+  color: var(--nyt-gray-med);
+  letter-spacing: 0.2px;
+  border-top: 1px solid var(--nyt-gray-border);
+  padding-top: 12px;
+  margin-top: 20px;
+  font-weight: 400;
+}
+
+/* ─── NYT Story body ─────────────────────────────────── */
+.story { max-width: var(--col); margin: 0 auto; padding: 0 20px; }
+.prose { padding: 24px 0; }
+.prose p { 
+  margin-bottom: 18px; 
+  font-family: 'Noto Serif', Georgia, serif;
+  line-height: 1.625;
+  font-size: 18px;
+}
+.prose p:first-child::first-letter {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 58px;
+  font-weight: 400;
+  float: left;
+  line-height: 1;
+  margin: 2px 8px 0 0;
+  color: var(--nyt-black);
+}
+
+h2.sec {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 48px 0 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--nyt-gray-border);
+  color: var(--nyt-black);
+}
+
+.pull {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 20px;
+  font-style: italic;
+  color: var(--nyt-gray);
+  border-left: 3px solid var(--nyt-gray-border);
+  padding: 16px 0 16px 20px;
+  margin: 32px 0;
+  line-height: 1.5;
+  background: var(--nyt-gray-light);
+}
+
+/* ─── NYT Stat strip ─────────────────────────────────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 1px;
+  background: var(--nyt-gray-border);
+  border: 1px solid var(--nyt-gray-border);
+  margin: 32px 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.stat { 
+  background: var(--nyt-white); 
+  padding: 20px 16px; 
+  text-align: center; 
+}
+.stat-n {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--nyt-black);
+  line-height: 1;
+  display: block;
+}
+.stat-d {
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 11px;
+  color: var(--nyt-gray-med);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+  display: block;
+  font-weight: 500;
+}
+
+/* ─── NYT Viz blocks ─────────────────────────────────── */
+.viz-block {
+  background: var(--nyt-gray-light);
+  border: 1px solid var(--nyt-gray-border);
+  border-radius: 6px;
+  padding: 24px 20px 20px;
+  margin: 32px 0;
+  overflow: hidden;
+}
+.viz-tag {
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--nyt-blue);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.viz-title {
+  font-family: 'Noto Serif', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--nyt-black);
+}
+.viz-sub {
+  font-size: 14px;
+  color: var(--nyt-gray-med);
+  margin-bottom: 16px;
+  line-height: 1.4;
+  font-family: 'Helvetica', Arial, sans-serif;
+}
+
+/* ─── NYT Controls ───────────────────────────────────── */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+.ctrl-label {
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--nyt-gray-med);
+  font-weight: 500;
+}
+.btn {
+  background: var(--nyt-white);
+  border: 1px solid var(--nyt-gray-border);
+  padding: 6px 12px;
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--nyt-gray);
+  transition: all 0.2s;
+  border-radius: 3px;
+  font-weight: 500;
+}
+.btn:hover  { 
+  border-color: var(--nyt-gray); 
+  color: var(--nyt-black); 
+  background: var(--nyt-gray-light);
+}
+.btn.active { 
+  background: var(--nyt-blue); 
+  color: var(--nyt-white); 
+  border-color: var(--nyt-blue); 
+}
+
+/* ─── NYT Legend ─────────────────────────────────────── */
+.legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; }
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 11px;
+  color: var(--nyt-gray-med);
+  cursor: pointer;
+  font-weight: 400;
+}
+.leg-swatch { 
+  width: 12px; 
+  height: 12px; 
+  border-radius: 2px; 
+  flex-shrink: 0; 
+}
+
+/* ─── NYT D3 axis helpers ────────────────────────────── */
+svg text { font-family: 'Helvetica', Arial, sans-serif; }
+.axis path, .axis line { stroke: var(--nyt-gray-border); }
+.axis text { fill: var(--nyt-gray-med); font-size: 11px; }
+.grid line { stroke: var(--nyt-gray-border); stroke-dasharray: 1 3; }
+.grid path { display: none; }
+
+/* ─── NYT Tooltip ────────────────────────────────────── */
+#tip {
+  position: fixed;
+  background: var(--nyt-black);
+  color: var(--nyt-white);
+  padding: 8px 12px;
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 9999;
+  max-width: 200px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* ─── NYT Loading overlay ────────────────────────────── */
+#loading {
+  position: fixed;
+  inset: 0;
+  background: var(--nyt-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  gap: 16px;
+}
+#loading p {
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 13px;
+  color: var(--nyt-gray-med);
+  letter-spacing: 0.2px;
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.5;
+}
+.spinner {
+  width: 32px; height: 32px;
+  border: 2px solid var(--nyt-gray-border);
+  border-top-color: var(--nyt-blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── NYT Map ────────────────────────────────────────── */
+.state { 
+  stroke: var(--nyt-white); 
+  stroke-width: 0.5; 
+  cursor: pointer; 
+  transition: opacity 0.2s; 
+}
+.state:hover { 
+  opacity: 0.8; 
+  stroke: var(--nyt-gray); 
+  stroke-width: 1; 
+}
+
+/* ─── NYT Footer ─────────────────────────────────────── */
+footer {
+  max-width: var(--col);
+  margin: 48px auto 0;
+  padding: 20px 20px 48px;
+  border-top: 1px solid var(--nyt-gray-border);
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--nyt-gray-med);
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) { .stats { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- Loading screen -->
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Loading <strong>h1b_datahubexport-2023.csv</strong>&hellip;<br>
+  Make sure the CSV is in the same folder as this HTML file<br>
+  and open via a local server (e.g. <code>python -m http.server</code>).</p>
+</div>
+
+<!-- ═══════════════════ PAGE CONTENT ═══════════════════ -->
+<div class="masthead">H-1B Employer Data Hub</div>
+
+<div class="hero">
+  <!-- <p class="kicker">Immigration &amp; the Economy</p> -->
+  <h1>The <em>$100,000</em> Question:<br>Who Really Pays?</h1>
+  <p class="hero-sub">A proposed fee hike on H-1B petitions would reshape American immigration — but its burden falls unevenly across industries, geographies, and employers large and small.</p>
+  <p class="byline">By <strong>Shengkai (Kevin) Tao</strong> &nbsp;·&nbsp; Source: USCIS H-1B Employer Data Hub &nbsp;·&nbsp; h1b_datahubexport-2023.csv</p>
+</div>
+
+<div class="story">
+  <div class="prose">
+    <p>For decades, the H-1B visa has been the front door to the American workforce for hundreds of thousands of skilled foreign workers each year. Engineers, doctors, professors, and nurses have passed through it — recruited by tech giants, research universities, rural hospitals, and small startups alike. Now, a proposed $100,000 fee per petition threatens to slam that door on the very employers least equipped to pay.</p>
+    <p>The politics of H-1B reform are familiar. But beneath the debate lies a less-examined reality: the program's users are not monolithic. The raw USCIS data tells a story of enormous variation — in who files, where they file, and what the stakes are for each of them.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="stat-n" id="s-total">—</span><span class="stat-d">Total approvals</span></div>
+    <div class="stat"><span class="stat-n" id="s-emp">—</span><span class="stat-d">Unique employers</span></div>
+    <div class="stat"><span class="stat-n" id="s-states">—</span><span class="stat-d">States filing</span></div>
+  </div>
+
+  <!-- ════════ VIZ 1 ════════ -->
+  <h2 class="sec">Who Files the Most — and Who Can't Afford Not To</h2>
+  <div class="prose">
+    <p>A handful of tech giants and IT outsourcing firms dominate H-1B filings by sheer volume. For these companies, a $100,000 fee would be a rounding error. But the chart below reveals what happens when you look beyond the top tier: hospitals, universities, and mid-sized manufacturers appear throughout — institutions for whom the fee could cost more than an entire department's annual operating budget.</p>
+  </div>
+
+  <div class="viz-block">
+    <p class="viz-tag">Visualization 1 &nbsp;·&nbsp; Interactive Bar Chart</p>
+    <p class="viz-title">Top 20 H-1B Employers by Total Approvals</p>
+    <p class="viz-sub">Aggregated from h1b_datahubexport-2023.csv. Toggle between approval types. Click a bar to highlight that employer.</p>
+    <div class="controls">
+      <span class="ctrl-label">Show&nbsp;</span>
+      <button class="btn active" data-v="total">Total</button>
+      <button class="btn" data-v="initial">Initial only</button>
+      <button class="btn" data-v="continuing">Continuing only</button>
+    </div>
+    <div id="chart1"></div>
+    <div class="legend" id="leg1"></div>
+  </div>
+
+  <div class="pull">"For a rural hospital, the fee isn't an inconvenience — it's a choice between hiring the specialist their community needs and not hiring at all."</div>
+
+  <!-- ════════ VIZ 2 ════════ -->
+  <h2 class="sec">The Geography of Dependence</h2>
+  <div class="prose">
+    <p>The policy debate often centers on Silicon Valley. But H-1B filings span every state. The map below aggregates every row in the CSV by state, showing which regional economies have the deepest ties to the program — and which would feel the weight of a fee hike most acutely. Hover over any state to see its exact numbers.</p>
+  </div>
+
+  <div class="viz-block">
+    <p class="viz-tag">Visualization 2 &nbsp;·&nbsp; Choropleth Map</p>
+    <p class="viz-title">H-1B Approvals by State, FY 2023</p>
+    <p class="viz-sub">Totals (initial + continuing) aggregated from the State column in the CSV. Hover any state for details. Toggle color scale.</p>
+    <div class="controls">
+      <span class="ctrl-label">Scale&nbsp;</span>
+      <button class="btn active" data-sc="log">Logarithmic</button>
+      <button class="btn" data-sc="linear">Linear</button>
+    </div>
+    <div id="chart2"></div>
+  </div>
+
+  <!-- ════════ VIZ 3 ════════ -->
+  <h2 class="sec">Approvals vs. Denials: Which Sectors Face the Most Scrutiny</h2>
+  <div class="prose">
+    <p>Beyond raw volume, the ratio of approvals to denials exposes which sectors face the steepest bureaucratic hurdles — before any fee increase arrives. The chart below breaks down initial approval and denial counts by broad NAICS sector derived directly from the CSV. Sectors already facing high denial rates would feel the compounded burden of a fee hike most severely.</p>
+  </div>
+
+  <div class="viz-block">
+    <p class="viz-tag">Visualization 3 &nbsp;·&nbsp; Grouped Bar Chart</p>
+    <p class="viz-title">Initial Approvals vs. Denials by Industry Sector</p>
+    <p class="viz-sub">Grouped by NAICS top-level code from h1b_datahubexport-2023.csv. Hover any bar for the denial rate. Click to isolate a sector.</p>
+    <div class="controls">
+      <span class="ctrl-label">Sort&nbsp;</span>
+      <button class="btn active" data-sort="approvals">By approvals</button>
+      <button class="btn" data-sort="denial_rate">By denial rate</button>
+    </div>
+    <div id="chart3"></div>
+    <div class="legend" id="leg3"></div>
+  </div>
+
+  <div class="prose">
+    <p>The data makes clear that H-1B dependence is not a Silicon Valley story alone. It is a national story — written in the staffing decisions of hospitals in Montana, universities in Ohio, and engineering firms in Georgia. A $100,000 fee would be absorbed easily by the largest filers and absorbed painfully — or not at all — by the rest.</p>
+    <p>Policy, as always, is not neutral. The question is not whether to reform the H-1B system, but which vision of that system the reform is meant to serve.</p>
+  </div>
+</div>
+
+<footer>
+  <strong>Remix of:</strong> <a href="https://www.nytimes.com/interactive/2025/09/25/business/economy/h1b-visa-fee.html" target="_blank" style="color:inherit; text-decoration:underline;"><em>$100,000 Per Employee: How the H-1B Visa Fee Could Reshape Work Forces</em></a> — <strong>The New York Times</strong>.<br>
+  <strong>Author of Remix:</strong> Shengkai (Kevin) Tao<br><br>
+  <strong>Data source:</strong> U.S. Citizenship and Immigration Services (USCIS) H-1B Employer Data Hub.<br>
+  File: <code>h1b_datahubexport-2023.csv</code> &mdash; Fiscal Year 2023.<br>
+  Columns used: <em>Employer, Initial Approvals, Initial Denials, Continuing Approvals, Continuing Denials, NAICS, State.</em><br><br>
+  Using AI to help design the NYT-style web page and debug D3 code (Gemini CLI / Claude).<br><br>
+  NAICS sector labels derived from the first two digits of the NAICS code per U.S. Census Bureau classification.<br>
+  All aggregations performed client-side in D3.js v7 from the raw CSV. Values represent petition counts, not individual workers.<br><br>
+  Map geometry: US Atlas TopoJSON (cdn.jsdelivr.net/npm/us-atlas@3). This visualization is an independent educational remix.
+</footer>
+
+<div id="tip"></div>
+
+<!-- ═══════════════════ D3 SCRIPT ═══════════════════════ -->
+<script>
+"use strict";
+
+const NAICS_MAP = {
+  "11":"Agriculture",        "21":"Mining & Energy",
+  "22":"Utilities",          "23":"Construction",
+  "31":"Manufacturing",      "32":"Manufacturing",      "33":"Manufacturing",
+  "42":"Wholesale Trade",    "44":"Retail Trade",       "45":"Retail Trade",
+  "48":"Transportation",     "49":"Transportation",
+  "51":"Information / Tech", "52":"Finance & Insurance",
+  "53":"Real Estate",        "54":"Professional Svcs",
+  "55":"Management",         "56":"Admin & Support",
+  "61":"Education",          "62":"Health Care",
+  "71":"Arts & Recreation",  "72":"Food & Hospitality",
+  "81":"Other Services",     "92":"Public Admin",       "99":"Unknown"
+};
+
+function naicsLabel(code) {
+  const key = String(code || "").trim().slice(0, 2);
+  return NAICS_MAP[key] || (key ? `NAICS ${key}` : "Unknown");
+}
+
+const FIPS = {
+  "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT",
+  "10":"DE","12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN",
+  "19":"IA","20":"KS","21":"KY","22":"LA","23":"ME","24":"MD","25":"MA",
+  "26":"MI","27":"MN","28":"MS","29":"MO","30":"MT","31":"NE","32":"NV",
+  "33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH",
+  "40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN",
+  "48":"TX","49":"UT","50":"VT","51":"VA","53":"WA","54":"WV","55":"WI",
+  "56":"WY"
+};
+
+const tip   = document.getElementById("tip");
+const fmtN  = d3.format(",");
+const fmtPct = d3.format(".1%");
+
+function showTip(html, event) {
+  tip.innerHTML = html;
+  tip.style.opacity = 1;
+  moveTip(event);
+}
+function moveTip(event) {
+  tip.style.left = Math.min(event.clientX + 16, window.innerWidth - 250) + "px";
+  tip.style.top  = (event.clientY - 36) + "px";
+}
+function hideTip() { tip.style.opacity = 0; }
+
+function cw(id) { return document.getElementById(id).clientWidth || 680; }
+
+d3.csv("h1b_datahubexport-2023.csv", row => ({
+  employer:       (row["Employer"] || "").trim(),
+  initialApp:    +row["Initial Approval"]    || 0,
+  initialDen:    +row["Initial Denial"]      || 0,
+  contApp:       +row["Continuing Approval"] || 0,
+  contDen:       +row["Continuing Denial"]   || 0,
+  naics:          (row["NAICS"] || "").trim(),
+  state:          (row["State"]  || "").trim().toUpperCase().slice(0, 2),
+}))
+.then(raw => {
+  const data = raw.filter(d => d.employer && d.employer !== "Employer");
+
+  const totalApp  = d3.sum(data, d => d.initialApp + d.contApp);
+  const uniqEmp   = new Set(data.map(d => d.employer)).size;
+  const uniqState = new Set(data.map(d => d.state).filter(s => s.length === 2)).size;
+
+  document.getElementById("s-total").textContent  = d3.format(".3~s")(totalApp);
+  document.getElementById("s-emp").textContent    = d3.format(",")(uniqEmp);
+  document.getElementById("s-states").textContent = uniqState;
+
+  document.getElementById("loading").style.display = "none";
+
+  buildChart1(data);
+  buildChart2(data);
+  buildChart3(data);
+})
+.catch(err => {
+  document.getElementById("loading").innerHTML = `
+    <p style="color:var(--red);max-width:480px;">
+      ⚠ <strong>Could not load h1b_datahubexport-2023.csv</strong><br><br>
+      Place the CSV in the <strong>same folder</strong> as this HTML file,<br>
+      then serve via a local HTTP server:<br><br>
+      <code>python -m http.server 8000</code><br>
+      then open <code>http://localhost:8000</code><br><br>
+      <small style="opacity:.6">${err}</small>
+    </p>`;
+});
+
+
+// ═════════════════════════════════════════════════════════════════════════
+//  CHART 1 — Horizontal bar chart: top 20 employers
+// ═════════════════════════════════════════════════════════════════════════
+function buildChart1(data) {
+  // Aggregate total approvals per employer across all rows
+  const byEmp = d3.rollups(
+    data,
+    v => ({
+      initial:    d3.sum(v, d => d.initialApp),
+      continuing: d3.sum(v, d => d.contApp),
+    }),
+    d => d.employer
+  )
+  .map(([emp, vals]) => ({ employer: emp, ...vals, total: vals.initial + vals.continuing }))
+  .sort((a, b) => b.total - a.total)
+  .slice(0, 20);
+
+  // Truncate long names for display
+  byEmp.forEach(d => {
+    d.label = d.employer.length > 30 ? d.employer.slice(0, 28) + "…" : d.employer;
+  });
+
+  const ML = 200, MR = 82, MT = 12, MB = 34;
+  const rowH = 33;
+  const W  = cw("chart1");
+  const H  = byEmp.length * rowH + MT + MB;
+
+  const svg = d3.select("#chart1").append("svg").attr("width", W).attr("height", H);
+
+  // Y: employer names
+  const y = d3.scaleBand()
+    .domain(byEmp.map(d => d.employer))
+    .range([MT, H - MB])
+    .padding(.26);
+
+  // X: value (updated on toggle)
+  const x = d3.scaleLinear().range([ML, W - MR]);
+
+  // Color by rank bucket
+  const color = d3.scaleOrdinal(d3.schemeTableau10);
+
+  // Static Y axis
+  svg.append("g").attr("class", "axis")
+    .attr("transform", `translate(${ML},0)`)
+    .call(d3.axisLeft(y).tickSize(0).tickPadding(8)
+              .tickFormat((_, i) => byEmp[i].label))
+    .call(g => g.select(".domain").remove())
+    .selectAll("text")
+      .style("font-size", "11px")
+      .style("fill", "var(--nyt-black)")
+      .style("font-family", "'Helvetica', Arial, sans-serif");
+
+  const gridG  = svg.append("g").attr("class", "grid");
+  const xAxisG = svg.append("g").attr("class", "axis").attr("transform", `translate(0,${H - MB})`);
+  const barsG  = svg.append("g");
+  const labG   = svg.append("g");
+
+  let mode = "total", selected = null;
+
+  function val(d) {
+    return mode === "initial" ? d.initial : mode === "continuing" ? d.continuing : d.total;
+  }
+
+  function update(animate) {
+    const mx = d3.max(byEmp, val);
+    x.domain([0, mx * 1.09]);
+
+    gridG.call(d3.axisBottom(x).ticks(5).tickSize(-(H - MT - MB)))
+      .attr("transform", `translate(0,${H - MB})`)
+      .call(g => { g.selectAll("text").remove(); g.select(".domain").remove(); });
+
+    xAxisG.call(
+      d3.axisBottom(x).ticks(5)
+        .tickFormat(d => d >= 1000 ? d3.format(",.0f")(d / 1000) + "k" : d)
+    ).call(g => g.select(".domain").remove())
+     .selectAll("text").style("font-family","'IBM Plex Mono', monospace").style("font-size","11px");
+
+    const bars = barsG.selectAll("rect").data(byEmp, d => d.employer);
+    bars.enter().append("rect")
+      .attr("y", d => y(d.employer)).attr("x", ML).attr("height", y.bandwidth()).attr("rx", 1)
+      .merge(bars)
+      .on("mouseover", (ev, d) => showTip(
+        `<strong>${d.employer}</strong><br>` +
+        `Initial:    ${fmtN(d.initial)}<br>` +
+        `Continuing: ${fmtN(d.continuing)}<br>` +
+        `Total:      ${fmtN(d.total)}`, ev))
+      .on("mousemove", moveTip).on("mouseleave", hideTip)
+      .on("click", (_, d) => {
+        selected = selected === d.employer ? null : d.employer;
+        barsG.selectAll("rect").attr("opacity",
+          e => selected && e.employer !== selected ? .14 : .9);
+      })
+      .transition().duration(animate ? 480 : 0)
+        .attr("y", d => y(d.employer))
+        .attr("width", d => Math.max(0, x(val(d)) - ML))
+        .attr("height", y.bandwidth())
+        .attr("fill", (_, i) => color(i))
+        .attr("opacity", .9);
+
+    const labs = labG.selectAll("text").data(byEmp, d => d.employer);
+    labs.enter().append("text").merge(labs)
+      .transition().duration(animate ? 480 : 0)
+        .attr("x", d => x(val(d)) + 5)
+        .attr("y", d => y(d.employer) + y.bandwidth() / 2 + 4)
+        .text(d => fmtN(val(d)))
+        .style("font-size","11px").style("fill","var(--muted)")
+        .style("font-family","'IBM Plex Mono', monospace");
+  }
+
+  update(false);
+
+  // Toggle buttons
+  document.querySelectorAll("[data-v]").forEach(btn =>
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("[data-v]").forEach(b => b.classList.remove("active"));
+      this.classList.add("active");
+      mode = this.dataset.v;
+      update(true);
+    })
+  );
+
+  // Simple rank legend
+  const legEl = document.getElementById("leg1");
+  ["Rank 1–5","Rank 6–10","Rank 11–15","Rank 16–20"].forEach((label, i) => {
+    const el = document.createElement("div");
+    el.className = "leg-item";
+    el.innerHTML = `<div class="leg-swatch" style="background:${color(i * 5 + 2)}"></div>${label}`;
+    legEl.appendChild(el);
+  });
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════
+//  CHART 2 — Choropleth map: approvals by state
+// ═════════════════════════════════════════════════════════════════════════
+function buildChart2(data) {
+  // Aggregate from State column in the CSV
+  const byState = d3.rollups(
+    data.filter(d => d.state.length === 2),
+    v => ({
+      approvals: d3.sum(v, d => d.initialApp + d.contApp),
+      denials:   d3.sum(v, d => d.initialDen + d.contDen),
+    }),
+    d => d.state
+  ).map(([state, vals]) => ({ state, ...vals }));
+
+  const stateMap = new Map(byState.map(d => [d.state, d]));
+  const maxApp   = d3.max(byState, d => d.approvals) || 1;
+
+  let scaleType = "log";
+  const logColor = d3.scaleSequential([1, maxApp],     d3.interpolate("#f0e8d8","#1a3a5c"));
+  const linColor = d3.scaleSequential([0, maxApp],     d3.interpolate("#f0e8d8","#1a3a5c"));
+  const colOf    = app => (scaleType === "log" ? logColor : linColor)(app || 0);
+
+  const W = cw("chart2");
+  const H = Math.round(W * 0.61);
+  const svg = d3.select("#chart2").append("svg").attr("width", W).attr("height", H);
+
+  // Gradient legend bar
+  const defs = svg.append("defs");
+  const grad = defs.append("linearGradient").attr("id","map-grad");
+  grad.append("stop").attr("offset","0%").attr("stop-color","#f0e8d8");
+  grad.append("stop").attr("offset","100%").attr("stop-color","#1a3a5c");
+  const lw = 180, lh = 10, lx = W - lw - 16, ly = H - 30;
+  svg.append("rect").attr("x",lx).attr("y",ly).attr("width",lw).attr("height",lh)
+    .attr("fill","url(#map-grad)").attr("rx",1);
+  [["Fewer", lx, "start"], ["More", lx + lw, "end"]].forEach(([txt, x, anchor]) =>
+    svg.append("text").attr("x", x).attr("y", ly - 4).attr("text-anchor", anchor)
+      .text(txt).style("font-size","10px").style("fill","var(--muted)")
+      .style("font-family","'IBM Plex Mono', monospace")
+  );
+
+  // Load US Atlas TopoJSON
+  fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json")
+    .then(r => r.json())
+    .then(us => {
+      const states  = topojson.feature(us, us.objects.states);
+      const proj    = d3.geoAlbersUsa().fitSize([W - 20, H - 46], states);
+      const pathGen = d3.geoPath().projection(proj);
+
+      const stateG = svg.append("g").attr("transform","translate(10,8)");
+
+      stateG.selectAll("path")
+        .data(states.features)
+        .join("path")
+        .attr("class","state")
+        .attr("d", pathGen)
+        .attr("fill", d => {
+          const abbr = FIPS[String(d.id).padStart(2,"0")];
+          const sd   = stateMap.get(abbr);
+          return sd ? colOf(sd.approvals) : "#e8dfc8";
+        })
+        .on("mouseover", (ev, d) => {
+          const abbr = FIPS[String(d.id).padStart(2,"0")];
+          const sd   = stateMap.get(abbr);
+          if (sd) {
+            const tot = sd.approvals + sd.denials;
+            showTip(
+              `<strong>${abbr}</strong><br>` +
+              `Approvals:   ${fmtN(sd.approvals)}<br>` +
+              `Denials:     ${fmtN(sd.denials)}<br>` +
+              `Denial rate: ${fmtPct(sd.denials / tot)}`, ev);
+          }
+        })
+        .on("mousemove", moveTip)
+        .on("mouseleave", hideTip);
+
+      // Scale toggle
+      document.querySelectorAll("[data-sc]").forEach(btn =>
+        btn.addEventListener("click", function () {
+          document.querySelectorAll("[data-sc]").forEach(b => b.classList.remove("active"));
+          this.classList.add("active");
+          scaleType = this.dataset.sc;
+          stateG.selectAll("path").transition().duration(420)
+            .attr("fill", d => {
+              const abbr = FIPS[String(d.id).padStart(2,"0")];
+              const sd   = stateMap.get(abbr);
+              return sd ? colOf(sd.approvals) : "#e8dfc8";
+            });
+        })
+      );
+    });
+}
+
+
+// ═════════════════════════════════════════════════════════════════════════
+//  CHART 3 — Grouped bar chart: initial approvals vs denials by NAICS sector
+// ═════════════════════════════════════════════════════════════════════════
+function buildChart3(data) {
+  // Aggregate by top-level NAICS sector
+  const bySector = d3.rollups(
+    data,
+    v => ({
+      approvals: d3.sum(v, d => d.initialApp),
+      denials:   d3.sum(v, d => d.initialDen),
+    }),
+    d => naicsLabel(d.naics)
+  )
+  .map(([sector, vals]) => ({
+    sector,
+    approvals:   vals.approvals,
+    denials:     vals.denials,
+    denial_rate: vals.approvals + vals.denials > 0
+                 ? vals.denials / (vals.approvals + vals.denials)
+                 : 0,
+  }))
+  .filter(d => d.approvals + d.denials >= 50)  // drop near-zero sectors
+  .sort((a, b) => b.approvals - a.approvals)
+  .slice(0, 13);
+
+  const ML = 40, MR = 20, MT = 16, MB = 138;
+  const W  = cw("chart3");
+  const H  = 440;
+  const iW = W - ML - MR;
+  const iH = H - MT - MB;
+
+  const svg = d3.select("#chart3").append("svg").attr("width", W).attr("height", H);
+  const g   = svg.append("g").attr("transform", `translate(${ML},${MT})`);
+
+  const COLORS = { approvals: "#1a4f7a", denials: "#b5200d" };
+  const subKeys = ["approvals","denials"];
+
+  const x0 = d3.scaleBand().domain(bySector.map(d => d.sector)).range([0, iW]).padding(.30);
+  const x1 = d3.scaleBand().domain(subKeys).range([0, x0.bandwidth()]).padding(.06);
+  const y  = d3.scaleLinear().range([iH, 0]);
+
+  let sortKey = "approvals", selected = null;
+
+  function draw(animate) {
+    const sorted = [...bySector].sort((a, b) => b[sortKey] - a[sortKey]);
+    x0.domain(sorted.map(d => d.sector));
+
+    const mx = d3.max(bySector, d => Math.max(d.approvals, d.denials));
+    y.domain([0, mx * 1.12]);
+
+    // Grid
+    g.selectAll(".grid-group").remove();
+    g.append("g").attr("class","grid grid-group")
+      .call(d3.axisLeft(y).ticks(5).tickSize(-iW))
+      .call(gr => { gr.select(".domain").remove(); gr.selectAll("text").remove(); });
+
+    // Y axis
+    g.selectAll(".y-ax").remove();
+    g.append("g").attr("class","axis y-ax")
+      .call(d3.axisLeft(y).ticks(5)
+        .tickFormat(d => d >= 1000 ? d3.format(",.0f")(d/1000)+"k" : d))
+      .call(ax => ax.select(".domain").remove())
+      .selectAll("text")
+        .style("font-family","'IBM Plex Mono', monospace").style("font-size","11px");
+
+    // X axis
+    g.selectAll(".x-ax").remove();
+    g.append("g").attr("class","axis x-ax")
+      .attr("transform", `translate(0,${iH})`)
+      .call(d3.axisBottom(x0).tickSize(0).tickPadding(10))
+      .call(ax => ax.select(".domain").remove())
+      .selectAll("text")
+        .style("font-family","'IBM Plex Mono', monospace")
+        .style("font-size","10.5px")
+        .attr("transform","rotate(-40)")
+        .attr("text-anchor","end");
+
+    // Sector groups
+    const grps = g.selectAll(".sec-grp").data(bySector, d => d.sector);
+    const grpE = grps.enter().append("g").attr("class","sec-grp");
+    const grpM = grpE.merge(grps);
+
+    grpM.transition().duration(animate ? 450 : 0)
+      .attr("transform", d => `translate(${x0(d.sector)},0)`);
+
+    // Bars inside each group
+    const bars = grpM.selectAll("rect")
+      .data(d => subKeys.map(k => ({ key: k, value: d[k], parent: d })), d => d.key);
+
+    bars.enter().append("rect")
+      .attr("x", d => x1(d.key)).attr("y", iH).attr("width", x1.bandwidth()).attr("height", 0).attr("rx", 1)
+      .merge(bars)
+      .on("mouseover", (ev, d) => showTip(
+        `<strong>${d.parent.sector}</strong><br>` +
+        `Initial Approvals: ${fmtN(d.parent.approvals)}<br>` +
+        `Initial Denials:   ${fmtN(d.parent.denials)}<br>` +
+        `Denial rate: ${fmtPct(d.parent.denial_rate)}`, ev))
+      .on("mousemove", moveTip).on("mouseleave", hideTip)
+      .on("click", (_, d) => {
+        selected = selected === d.parent.sector ? null : d.parent.sector;
+        g.selectAll(".sec-grp").attr("opacity",
+          e => selected && e.sector !== selected ? .15 : 1);
+      })
+      .transition().duration(animate ? 450 : 0)
+        .attr("x",      d => x1(d.key))
+        .attr("width",  x1.bandwidth())
+        .attr("y",      d => y(d.value))
+        .attr("height", d => iH - y(d.value))
+        .attr("fill",   d => COLORS[d.key])
+        .attr("opacity", .88);
+  }
+
+  draw(false);
+
+  // Sort toggle
+  document.querySelectorAll("[data-sort]").forEach(btn =>
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("[data-sort]").forEach(b => b.classList.remove("active"));
+      this.classList.add("active");
+      sortKey = this.dataset.sort;
+      draw(true);
+    })
+  );
+
+  // Legend
+  const legEl = document.getElementById("leg3");
+  [["approvals","Initial Approvals"],["denials","Initial Denials"]].forEach(([k, label]) => {
+    const el = document.createElement("div");
+    el.className = "leg-item";
+    el.innerHTML = `<div class="leg-swatch" style="background:${COLORS[k]}"></div>${label}`;
+    legEl.appendChild(el);
+  });
+}
+</script>
+</body>
+</html>
