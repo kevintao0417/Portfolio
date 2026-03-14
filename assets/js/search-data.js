@@ -462,6 +462,11 @@ ninja.data = [{
           description: "Rowdy Braude (Remote, base in Charlotte, NC) | May 2025 – Now",
           section: "Experience",handler: () => {
               window.location.href = "/Portfolio/experience/1_rowdy_braude/";
+            },},{id: "projects-the-100-000-question",
+          title: 'The $100,000 Question',
+          description: "Remix of the NYT H1B problem - Who Really Pays?",
+          section: "Projects",handler: () => {
+              window.location.href = "/Portfolio/webpages/The%20$100,000%20Question/";
             },},{id: "projects-asa-datafest-2025",
           title: 'ASA DataFest 2025',
           description: "Best Visualization Award - Office Expansion Analysis",
